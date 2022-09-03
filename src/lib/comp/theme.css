@@ -1,0 +1,11 @@
+:root {
+    --alert-bg-good: darkgreen;
+    --alert-bg-bad: darkred;
+    --alert-bg-ugly: darkgoldenrod;
+    --alert-cl-good: lightgray;
+    --alert-cl-bad: lightgray;
+    --alert-cl-ugly: black;
+    --alert-shadow:drop-shadow(8px 8px 5px darkgray);
+    --disabled-cl: darkgray;
+    --normal-cl:black;
+}

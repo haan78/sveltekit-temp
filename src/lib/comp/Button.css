@@ -1,0 +1,22 @@
+.btn {    
+    font-weight: bold;
+    border-radius: 10px;
+    padding: .5em;
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+.btn.good {
+    background-color: var(--alert-bg-good);
+    color: var(--alert-cl-good);
+}
+
+.btn.bad {
+    background-color: var(--alert-bg-bad);
+    color: var(--alert-cl-bad);
+}
+
+.btn.small {
+    padding: .3em;
+    font-size: small;
+}
