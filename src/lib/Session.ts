@@ -32,12 +32,29 @@ export abstract class SessionHandler {
 
 
 
-    private setCookieToResponse(response:Response ,remove:boolean = false):void {
-        const cookie = serialize(SessionHandler.cookie_name,this.id,SessionHandler.cookieSerializeOptions);
-        response.headers.set("set-cookie",cookie);        
+    private setCookieToResponse(location:string,remove:boolean = false):Response {
+        
+        if (this.id) {
+            let op = SessionHandler.cookieSerializeOptions;
+            if (remove) {
+                op.maxAge = -1;
+            }
+            const cookie = serialize(SessionHandler.cookie_name,this.id,op);
+            const response = Response.redirect(location,301);
+            response.headers.set("set-cookie",cookie);
+            return response;
+        } else {
+            return Response.redirect(location,302);
+        }
+        
+                
     }
 
     private setCookieToEvent(cookies:Cookies,remove:boolean = false): void {
+        let op = SessionHandler.cookieSerializeOptions;
+        if (remove) {
+            op.maxAge = -1;
+        }
         cookies.set(SessionHandler.cookie_name,this.id,SessionHandler.cookieSerializeOptions);
     }
 
@@ -68,31 +85,25 @@ export abstract class SessionHandler {
 
     public async send(location:string,data:any):Promise<Response> {
         await this.set(data);
-        const response = new Response('', { status: 301, headers: { Location: location} });
-        this.setCookieToResponse(response);
-        return response;
+        return this.setCookieToResponse(location);
     }
 
     public async kill(location:string):Promise<Response> {
         const response = new Response('', { status: 301, headers: { Location: location} });
-        if (this.id) {
-            await this.deleteById(this.id);            
-            this.setCookieToResponse(response,true);            
-            this.id = "";
-        }
-        return response;
+        return this.setCookieToResponse(location,true);
     }
 
     public async accept(location:string) {
         const response = new Response('', { status: 301, headers: { Location: location} });
         if (this.id) {           
-            this.setCookieToResponse(response);            
-            this.id = "";
+            return this.setCookieToResponse(location);
+        } else {
+            throw new Error("No Session ID");
         }
     }
 
     public reject(location:string) {
-        return new Response('', { status: 302, headers: { Location: location} });
+        return Response.redirect(location,302);
     }
 
     protected abstract getById(id: string): Promise<any>;
