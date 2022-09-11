@@ -6,14 +6,6 @@ import type { Cookies, RequestEvent } from '@sveltejs/kit/types/internal';
 import fs from 'fs';
 import { join } from 'path';
 
-export type IHandlerSettings = {
-    cookie_name:string;
-    cookie_path:string;
-    cookie_http_only:boolean;
-    cookie_secure:boolean;
-    timeout:number;
-}
-
 
 export abstract class SessionHandler {
 
