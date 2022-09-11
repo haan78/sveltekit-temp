@@ -11,9 +11,10 @@ ADD ./.env /app/.env
 
 WORKDIR /app
 
+RUN mkdir sessions
 RUN npm install
 RUN npm run build
 ENTRYPOINT npm run preview
 #ENTRYPOINT top
 
-EXPOSE 8008
+EXPOSE 8007

@@ -1,8 +1,10 @@
-import fs from 'fs';
+
 import { randomUUID } from 'crypto'
+import { serialize,parse,CookieSerializeOptions } from 'cookie';
+import type { Cookies, RequestEvent } from '@sveltejs/kit/types/internal';
+
+import fs from 'fs';
 import { join } from 'path';
-import { serialize,parse } from 'cookie';
-import type { RequestEvent, ResponseHeaders } from '@sveltejs/kit/types/internal';
 
 export type IHandlerSettings = {
     cookie_name:string;
@@ -12,52 +14,46 @@ export type IHandlerSettings = {
     timeout:number;
 }
 
-export const DefaultHandlerSettings:IHandlerSettings = {
-    cookie_http_only:true,
-    cookie_name:"SERVER_SESSION_ID",
-    cookie_path:"/",
-    cookie_secure:true,
-    timeout:600
-};
-
-export type SetHeaders = (headers: ResponseHeaders) => void;
 
 export abstract class SessionHandler {
 
     private id:string = "";
-    private setheaders:SetHeaders;
+    public static cookie_name = "SK_SESSION_ID";
+    public static cookieSerializeOptions:CookieSerializeOptions = {
+        httpOnly:true,
+        path:"/",
+        secure:true,
+        sameSite:true,
+        maxAge:600
+    };
+    private eventCookies:Cookies;
     private locals:App.Locals;
     private data:any = null;
-    public settings:IHandlerSettings = DefaultHandlerSettings;
 
     constructor(event:RequestEvent) {
-        this.setheaders = event.setHeaders;
+
+        this.eventCookies = event.cookies;
         this.locals = event.locals;
         const cookieData:Record<string,string> = parse( event.request.headers.get("cookie") || "");
-        this.id = cookieData[this.settings.cookie_name] || "";
+        this.id = cookieData[SessionHandler.cookie_name] || "";
     }
 
-    private setCookie(target:Response|SetHeaders ,remove:boolean = false):void {
-        const cookie = serialize(this.settings.cookie_name,this.id,{
-            httpOnly:this.settings.cookie_http_only,
-            secure:this.settings.cookie_secure,
-            maxAge:(remove ? -1 :  Math.floor(Date.now() / 1000) + this.settings.timeout),
-            sameSite:true,
-            path:this.settings.cookie_path
-        });
-        if ( target instanceof Response ) {
-            target.headers.set("set-cookie",cookie);
-        } else {
-            target({"set-cookie":cookie});
-        }
-        
+
+
+    private setCookieToResponse(response:Response ,remove:boolean = false):void {
+        const cookie = serialize(SessionHandler.cookie_name,this.id,SessionHandler.cookieSerializeOptions);
+        response.headers.set("set-cookie",cookie);        
+    }
+
+    private setCookieToEvent(cookies:Cookies,remove:boolean = false): void {
+        cookies.set(SessionHandler.cookie_name,this.id,SessionHandler.cookieSerializeOptions);
     }
 
     public async get():Promise<any> {          
         if ( this.id ) {
             this.data = await this.getById(this.id);
             if (this.data !== null) {
-                this.setCookie(this.setheaders);
+                this.setCookieToEvent(this.eventCookies);
                 this.locals["session"] = this.data;
             }            
             return this.data;
@@ -67,16 +63,21 @@ export abstract class SessionHandler {
         }
     }
 
-    public async set(data:any):Promise<void> {
+    private async set(data:any):Promise<void> {
         const id = this.id || randomUUID();      
         await this.setById(data,id);
         this.id = id;
     }
 
+    public async update(data:any):Promise<void> {
+        await this.set(data);
+        this.setCookieToEvent(this.eventCookies);
+    }
+
     public async send(location:string,data:any):Promise<Response> {
         await this.set(data);
         const response = new Response('', { status: 301, headers: { Location: location} });
-        this.setCookie(response);
+        this.setCookieToResponse(response);
         return response;
     }
 
@@ -84,7 +85,7 @@ export abstract class SessionHandler {
         const response = new Response('', { status: 301, headers: { Location: location} });
         if (this.id) {
             await this.deleteById(this.id);            
-            this.setCookie(response,true);            
+            this.setCookieToResponse(response,true);            
             this.id = "";
         }
         return response;
@@ -93,7 +94,7 @@ export abstract class SessionHandler {
     public async accept(location:string) {
         const response = new Response('', { status: 301, headers: { Location: location} });
         if (this.id) {           
-            this.setCookie(response,true);            
+            this.setCookieToResponse(response);            
             this.id = "";
         }
     }
@@ -121,7 +122,7 @@ export class DirSessionHandler extends SessionHandler {
     }
 
     clear() {
-        const end = (new Date()).getTime() - ( this.settings.timeout * 1000);
+        const end = (new Date()).getTime() - ( (DirSessionHandler.cookieSerializeOptions.maxAge ? DirSessionHandler.cookieSerializeOptions.maxAge : 600) * 1000);
         fs.readdir(this.dir,(err, files)=>{
             if (!err) {
                 files.forEach((file)=>{
@@ -130,16 +131,16 @@ export class DirSessionHandler extends SessionHandler {
                         if (!err) {
                             if (stats.atimeMs < end) {
                                 fs.unlink(fpath,err=>{
-                                    if (err) console.log(`${fpath} unlink ${err.message}`);
+                                    if (err) console.log(`session clear ${fpath} unlink ${err.message}`);
                                 });
                             }
                         } else {
-                            console.log(`${fpath} stats ${err.message}`);
+                            console.log(`session clear ${fpath} stats ${err.message}`);
                         }
                     });
                 });
             } else {
-                console.log(`${this.dir} readdir ${err.message}`);
+                console.log(`session clear  ${this.dir} readdir ${err.message}`);
             }
         });
     }
