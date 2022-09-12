@@ -5,9 +5,6 @@ services:
   npm:
     build: 
       context: .
-      args:
-        - VITE_DATABASE1=213.153.128.215|root|ebs1956|anket|3306
-        - VITE_SECRETKEY=phOrong50pYU7PEfS2Ubn5kaQa5bpOrPOYdfCCVZ
       dockerfile: Dockerfile      
     restart: on-failure 
     ports:

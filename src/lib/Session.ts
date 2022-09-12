@@ -1,10 +1,12 @@
 
 import { randomUUID } from 'crypto'
-import { serialize,parse,CookieSerializeOptions } from 'cookie';
+import { serialize,parse } from 'cookie';
 import type { Cookies, RequestEvent } from '@sveltejs/kit/types/internal';
 
 import fs from 'fs';
 import { join } from 'path';
+
+export type CookieSerializeOptions = import("cookie").CookieSerializeOptions;
 
 
 export abstract class SessionHandler {
@@ -35,23 +37,25 @@ export abstract class SessionHandler {
     private setCookieToResponse(location:string,remove:boolean = false):Response {
         
         if (this.id) {
-            let op = SessionHandler.cookieSerializeOptions;
+            let op = Object.assign({},SessionHandler.cookieSerializeOptions);
             if (remove) {
                 op.maxAge = -1;
             }
             const cookie = serialize(SessionHandler.cookie_name,this.id,op);
-            const response = Response.redirect(location,301);
+            console.log(cookie);
+            const response = new Response('', { status: 301, headers: { Location: location } });
             response.headers.set("set-cookie",cookie);
             return response;
         } else {
-            return Response.redirect(location,302);
+            console.log("hjgjk");
+            return new Response('', { status: 302, headers: { Location: location } });
         }
         
                 
     }
 
     private setCookieToEvent(cookies:Cookies,remove:boolean = false): void {
-        let op = SessionHandler.cookieSerializeOptions;
+        let op = Object.assign({},SessionHandler.cookieSerializeOptions);
         if (remove) {
             op.maxAge = -1;
         }
@@ -89,12 +93,10 @@ export abstract class SessionHandler {
     }
 
     public async kill(location:string):Promise<Response> {
-        const response = new Response('', { status: 301, headers: { Location: location} });
         return this.setCookieToResponse(location,true);
     }
 
     public async accept(location:string) {
-        const response = new Response('', { status: 301, headers: { Location: location} });
         if (this.id) {           
             return this.setCookieToResponse(location);
         } else {
@@ -103,12 +105,13 @@ export abstract class SessionHandler {
     }
 
     public reject(location:string) {
-        return Response.redirect(location,302);
+        return new Response('', { status: 302, headers: { Location: location } });
     }
 
     protected abstract getById(id: string): Promise<any>;
-    public abstract setById(id: string, data:any): Promise<void>;
-    public abstract deleteById(id: string): Promise<void>;
+    protected abstract setById(id: string, data:any): Promise<void>;
+    protected abstract deleteById(id: string): Promise<void>;
+    protected abstract clearOldRecords(): Promise<void>;
 }
 
 export class DirSessionHandler extends SessionHandler {
@@ -121,10 +124,10 @@ export class DirSessionHandler extends SessionHandler {
         }
         super(event);
         this.dir = dir;
-        this.clear();
+        this.clearOldRecords();
     }
 
-    clear() {
+    async clearOldRecords(): Promise<void> {
         const end = (new Date()).getTime() - ( (DirSessionHandler.cookieSerializeOptions.maxAge ? DirSessionHandler.cookieSerializeOptions.maxAge : 600) * 1000);
         fs.readdir(this.dir,(err, files)=>{
             if (!err) {
