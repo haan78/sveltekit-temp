@@ -75,7 +75,7 @@ export class MongoSessionHandler extends SessionHandler {
     }
     protected async deleteById(id: string): Promise<void> {
         const coll = await this.getCollection();
-        await coll.deleteOne({  session_id:id});
+        const result = await coll.deleteOne({session_id:id});
         await this.finish();
     }
     protected async clearOldRecords(): Promise<void> {

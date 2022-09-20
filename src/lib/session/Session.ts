@@ -86,6 +86,9 @@ export abstract class SessionHandler {
     }
 
     public async kill(location:string):Promise<Response> {
+        if (this.id) {
+            this.deleteById(this.id);
+        }
         return this.setCookieToResponse(location,true);
     }
 
