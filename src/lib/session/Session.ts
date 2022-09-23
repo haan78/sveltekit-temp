@@ -43,8 +43,6 @@ export abstract class SessionHandler {
         } else {        
             return new Response('', { status: 302, headers: { Location: location } });
         }
-        
-                
     }
 
     private setCookieToEvent(cookies:Cookies,remove:boolean = false): void {
@@ -87,7 +85,7 @@ export abstract class SessionHandler {
 
     public async kill(location:string):Promise<Response> {
         if (this.id) {
-            this.deleteById(this.id);
+            await this.deleteById(this.id);
         }
         return this.setCookieToResponse(location,true);
     }

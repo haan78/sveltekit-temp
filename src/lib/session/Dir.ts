@@ -73,7 +73,7 @@ export class DirSessionHandler extends SessionHandler {
         });
     }
 
-    async setById(data: any, id: string) {
+    async setById(id: string, data: any) {
         const path = join(this.dir,`${id}.json`);
         return new Promise<void>((resolve, reject) => {
             if (fs.existsSync(path)) {
