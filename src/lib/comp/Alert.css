@@ -3,7 +3,7 @@
 
     position: fixed;
     width: max-content;
-    min-width: 20em;
+    max-width: 25em;
     display: block;
     z-index: 999;
     margin-bottom: 1.3em;
@@ -11,6 +11,25 @@
     margin-right: .5em;
     margin-top: .5em;
 }
+
+@media only screen and (max-width:25em) {
+    .alert {
+        max-width: 20em;
+    }
+}
+
+@media only screen and (max-width:20em) {
+    .alert {
+        max-width: 15em;
+    }
+}
+
+@media only screen and (max-width:15em) {
+    .alert {
+        max-width: 10em;
+    }
+}
+
 
 .alert.top-center {
     margin-left: auto;
@@ -57,7 +76,6 @@
 
 .alert > .frame {
     display: block;
-    max-width: 20em;
     padding: .5em;
     border-radius: 20px;
     filter: var(--alert-shadow);

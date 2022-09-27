@@ -8,4 +8,29 @@
     --alert-shadow:drop-shadow(8px 8px 5px darkgray);
     --disabled-cl: darkgray;
     --normal-cl:black;
+    --cl-bad:red;
+    --bg-cl-primary:#1E90FF;
+    --cl-primary: #FFFAF0;
+    --cl-active: gold;
+}
+
+.btn {
+    font-weight: bold;
+    border: 1px black solid;
+    cursor: pointer;
+}
+
+.btn:hover {
+    border: 1px gray solid;
+}
+
+.btn:active {
+    opacity: 0.8;
+}
+
+.btn.prm {
+    background-color: var(--bg-cl-primary);
+    color: var(--cl-primary);
+    padding: .3em;
+    border-radius: 10px;
 }

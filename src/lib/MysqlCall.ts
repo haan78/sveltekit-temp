@@ -1,4 +1,5 @@
-import { createConnection,Connection } from 'mysql';
+import { createConnection, type MysqlError } from 'mysql';
+type Connection = import('mysql').Connection;
 interface Param {
     id:string,
     name?:string,
@@ -18,6 +19,35 @@ export interface Settings {
 export interface Result {
     outs:Record<string,unknown>,
     results:Array<Array<Record<string,unknown>>>
+}
+
+export async function insertOrUpdate(conn:Connection,table:string,params:Record<string,unknown>): Promise<void> {
+    let values = "";
+    let names = "";
+    let updates = "";
+    let varr:Array<unknown> = [];
+    for(var k in params) {
+        if (values) {
+            values += ", ";
+            updates += ", ";
+            names += ", ";
+        }
+        values += "?";
+        names += k;
+        updates += k+" = VALUES("+k+")";
+        varr.push(params[k]);
+    }
+
+    const sql = `INSERT INTO ${table} (${names}) VALUES (${values}) ON DUPLICATE KEY UPDATE ${updates}`;
+    return new Promise<void>((resolve,reject)=>{
+        conn.query(sql,varr,(_err,result)=>{
+            if (!_err) {                
+                resolve(result);
+            } else {
+                reject(_err);
+            }
+        });
+    });
 }
 
 export class MysqlCall  {
