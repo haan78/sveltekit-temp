@@ -10,14 +10,14 @@ jobs:
           JWTKEY: ${{ secrets.JWTKEY }}
           DBCONN: ${{ secrets.DBCONN }}
           DOCKER_HUB_AT: ${{ secrets.DOCKER_HUB_AT }}
-          DOCKER_HUB_USER: ${{ secrets.DOCKER_HUB_USER }}
-          DOCKER_HUB_CLUSTER: ${{ secrets.DOCKER_HUB_CLUSTER }}
+          DOCKER_HUB_USER: haan78
+          DOCKER_HUB_CLUSTER: baris
           DOCKER_HUB_URL:
           DOCKER_IMAGE: sveltekit-temp
-        run: |
-          echo "Building..."
-          echo VITE_JWTKEY=$JWTKEY > .env
-          echo VITE_DBCONN=$DBCONN >> .env
-          docker build -f ./Dockerfile -t $DOCKER_IMAGE .
+        run: |          
+          touch .env-production
+          echo VITE_JWTKEY=$JWTKEY >> .env-production
+          echo VITE_DBCONN=$DBCONN >> .env-production
+          docker build --build-arg ENV=.env-production -f ./Dockerfile -t $DOCKER_IMAGE .
           echo $DOCKER_HUB_AT | docker login -u $DOCKER_HUB_USER --password-stdin $DOCKER_HUB_URL
           docker image tag $DOCKER_IMAGE:latest $DOCKER_HUB_USER/$DOCKER_HUB_CLUSTER:$DOCKER_IMAGE
