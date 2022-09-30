@@ -13,7 +13,7 @@
 
 <label
   class={"CheckBox " +
-    (disabled ? "dis" : "") +
+    (disabled ? "dis" : "enb") +
     (position == "left" ? "left" : "")}
 >
   <input
@@ -64,6 +64,10 @@
     color: var(--cl-tx-disabled);
   }
 
+  :is(.CheckBox.enb > input[type=checkbox]):hover {
+    outline: var(--di-br-default) var(--cl-br-hover) solid;
+  }
+
   .CheckBox > input[type="checkbox"] {
     /* Add if not using autoprefixer */
     -webkit-appearance: none;
@@ -104,7 +108,7 @@
   }
 
   .CheckBox > input[type="checkbox"]:focus {
-    outline: max(2px, 0.15em) solid var(--cl-br-active);
+    /*outline: max(2px, 0.15em) solid var(--cl-br-active);*/
     outline-offset: max(2px, 0.15em);
   }
 </style>
