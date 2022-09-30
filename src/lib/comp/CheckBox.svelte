@@ -14,7 +14,7 @@
 <label
   class={"CheckBox " +
     (disabled ? "dis" : "enb") +
-    (position == "left" ? "left" : "")}
+    (position == "left" ? " left" : "")}
 >
   <input
     type="checkbox"
