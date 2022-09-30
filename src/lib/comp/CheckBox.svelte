@@ -2,12 +2,14 @@
   import { createEventDispatcher } from "svelte";
   export let disabled = false;
   export let position = "right";
-  export let value: boolean;
+  export let checked: boolean;
+  export let name: string | undefined;
+  export let value = "";
 
   const evtChange = createEventDispatcher();
 
   function onchange() {
-    evtChange("change", value);
+    evtChange("change", checked);
   }
 </script>
 
@@ -17,10 +19,11 @@
     (position == "left" ? " left" : "")}
 >
   <input
+    {name}
+    value={value}
     type="checkbox"
-    name="checkbox"
     {disabled}
-    bind:checked={value}
+    bind:checked={checked}
     on:change={onchange}
   />
   <span><slot /></span>
@@ -57,6 +60,13 @@
     cursor: not-allowed;
   }
 
+  .CheckBox.dis > input[type=checkbox] {
+    cursor: not-allowed;
+    color: var(--cl-tx-disabled);
+    cursor: not-allowed;
+    box-shadow: inset 1em 1em var(--cl-tx-disabled);
+  }
+
   .CheckBox.dis > span {
     color: var(--cl-tx-disabled);
   }
@@ -71,6 +81,7 @@
 
   .CheckBox > input[type="checkbox"] {
     /* Add if not using autoprefixer */
+    cursor: pointer;
     -webkit-appearance: none;
     /* Remove most all native input styles */
     appearance: none;

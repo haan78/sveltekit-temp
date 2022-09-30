@@ -23,7 +23,7 @@
             </select>
         </FormInput>
         <br/>
-        <CheckBox bind:value={checkbox_val} position="left">{(checkbox_val ? "EVET" : "HAYIR")}</CheckBox>
+        <CheckBox bind:checked={checkbox_val} position="left" name="cb1">{(checkbox_val ? "EVET" : "HAYIR")}</CheckBox>
 
         <br/>
     <button type="submit" class="btn prm"><LogInIcon size="1x"></LogInIcon>Kaydet</button>
