@@ -31,8 +31,9 @@
     --form-control-color: rebeccapurple;
     display: flex;
     flex-direction: row;
-    align-items: baseline;
+    align-items: flex-end;
     width: fit-content;
+    line-height: 1.5em;
     cursor: pointer;
   }
 
