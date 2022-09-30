@@ -1,22 +1,48 @@
-.btn {    
+.btn {
     font-weight: bold;
-    border-radius: 10px;
-    padding: .5em;
-    border: 1px solid black;
     cursor: pointer;
+
+    font: inherit;
+    display: inline-block;
+    padding-top: var(--di-in-default);
+    padding-bottom: var(--di-in-default);
+    padding-left: calc(var(--di-in-default)*2);
+    padding-right: calc(var(--di-in-default)*2);
+    
+    border-width: .13em;
+    border-style: solid;
+    border-color: var(--cl-br-default);
+    border-radius: .8em;
 }
 
-.btn.good {
-    background-color: var(--alert-bg-good);
-    color: var(--alert-cl-good);
+.btn:hover {
+    border-color: var(--cl-br-hover);
+}
+
+.btn:active {
+    border-color: var(--cl-br-active);
+}
+
+.btn > svg:first-child  {
+    margin-right: var(--di-in-default);    
+}
+
+.btn.prm {
+    background-color: var(--cl-bg-primary);
+    color: var(--cl-tx-primary);
 }
 
 .btn.bad {
-    background-color: var(--alert-bg-bad);
-    color: var(--alert-cl-bad);
+    background-color: var(--cl-bg-bad);
+    color: var(--cl-tx-primary);
 }
 
-.btn.small {
-    padding: .3em;
-    font-size: small;
+.btn.ugly {
+    background-color: var(--cl-bg-ugly);
+    color: var(--cl-tx-primary);
+}
+
+.btn.good {
+    background-color: var(--cl-bg-good);
+    color: var(--cl-tx-primary);
 }
