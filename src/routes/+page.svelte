@@ -26,13 +26,16 @@
         <CheckBox bind:checked={checkbox_val} position="left" name="cb1">{(checkbox_val ? "EVET" : "HAYIR")}</CheckBox>
 
         <br/>
+        <Radio bind:group={group} name="raido" value="A">Raido1</Radio><br/>
+        <Radio bind:group={group} name="raido" value="B">Raido2</Radio><br/>
+        <Radio bind:group={group} name="raido" value="C">Raido3</Radio><br/>
     <button type="submit" class="btn prm"><LogInIcon size="1x"></LogInIcon>Kaydet</button>
     <button type="button" class="btn bad"><ActivityIcon size="1x"></ActivityIcon>Kaydet</button>
     <button type="button" class="btn ugly"><SaveIcon size="1x"></SaveIcon> Kaydet</button>
     
     <button type="button" class="btn good">Kaydet</button>
     </FormContainer>
-    
+    {group}
 </main>
 <script>
 // @ts-nocheck
@@ -42,8 +45,10 @@
     import { onMount } from 'svelte';    
     import { ActivityIcon,SaveIcon,LogInIcon } from 'svelte-feather-icons'
     import CheckBox from '$lib/comp/CheckBox.svelte';
+    import Radio from '$lib/comp/Radio.svelte';
     let fi_soyad;
     let checkbox_val = true;
+    let group = "A";
     function validate() {
         console.log("burda");
         fi_soyad.message("Beğenmedim",3000);

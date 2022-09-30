@@ -31,7 +31,6 @@
 
 <style>
   .CheckBox {
-    --form-control-color: rebeccapurple;
     display: flex;
     flex-direction: row;
     align-items: flex-end;
@@ -71,7 +70,7 @@
     color: var(--cl-tx-disabled);
   }
 
-  .CheckBox.dis > input[type="checkbox"] {
+  .CheckBox.dis > input[type=checkbox] {
     color: var(--cl-tx-disabled);
   }
 
@@ -79,7 +78,7 @@
     outline: var(--di-br-default) var(--cl-br-hover) solid;
   }
 
-  .CheckBox > input[type="checkbox"] {
+  .CheckBox > input[type=checkbox] {
     /* Add if not using autoprefixer */
     cursor: pointer;
     -webkit-appearance: none;
@@ -102,7 +101,7 @@
     place-content: center;
   }
 
-  .CheckBox > input[type="checkbox"]::before {
+  .CheckBox > input[type=checkbox]::before {
     content: "";
     width: 0.65em;
     height: 0.65em;
@@ -115,11 +114,11 @@
     background-color: CanvasText;
   }
 
-  .CheckBox > input[type="checkbox"]:checked::before {
+  .CheckBox > input[type=checkbox]:checked::before {
     transform: scale(1);
   }
 
-  .CheckBox > input[type="checkbox"]:focus {
+  .CheckBox > input[type=checkbox]:focus {
     /*outline: max(2px, 0.15em) solid var(--cl-br-active);*/
     outline-offset: max(2px, 0.15em);
   }
