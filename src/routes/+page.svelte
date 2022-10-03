@@ -1,4 +1,5 @@
 <main>
+    <Auto bind:value={auto} name="auto" list={['Ali','Ali Veli','Deli','Barış','Barış Öztürk']}/>
     <FormContainer validate={validate}>    
         <FormInput>
             <span slot="label" >Ad</span>
@@ -39,7 +40,7 @@
 </main>
 <script>
 // @ts-nocheck
-    
+    import Auto from '$lib/comp/Auto.svelte';
     import FormInput from '$lib/comp/FormInput.svelte';
     import FormContainer from '$lib/comp/FormContainer.svelte';
     import { onMount } from 'svelte';    
@@ -49,6 +50,7 @@
     let fi_soyad;
     let checkbox_val = true;
     let group = "A";
+    let auto = "";
     function validate() {
         console.log("burda");
         fi_soyad.message("Beğenmedim",3000);

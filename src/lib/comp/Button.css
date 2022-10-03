@@ -9,9 +9,7 @@
     padding-left: calc(var(--di-in-default)*2);
     padding-right: calc(var(--di-in-default)*2);
     
-    border-width: .13em;
-    border-style: solid;
-    border-color: var(--cl-br-default);
+    border: var(--br-default);
     border-radius: .8em;
 }
 

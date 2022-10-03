@@ -35,6 +35,8 @@
 
     --di-in-default:.5em;
     --di-br-default:.2em;
+
+    --br-default:calc(var(--di-br-default)/2) var(--cl-br-default) solid;
 }
 
 html {
@@ -58,7 +60,7 @@ input[type=text],textarea,input[type=date],input[type=datetime-local],select {
     display: inline-block;
     border-radius: .5em;
     padding: var(--di-in-default);    
-    border: calc(var(--di-br-default)/2) var(--cl-br-default) solid;
+    border: var(--br-default);
     font-style: italic;
     color: var(--cl-tx-info);
 }

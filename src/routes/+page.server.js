@@ -2,7 +2,7 @@
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ locals }) {
-    console.log("APP_TEST",import.meta.env.APP_TEST);
+    //console.log("APP_TEST",import.meta.env.APP_TEST);
     return locals.session;
 
 }

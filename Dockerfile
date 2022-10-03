@@ -1,5 +1,5 @@
 FROM node:18.7.0-alpine3.15
-ARG ENV=.env
+ARG ENV=
 ENV TZ=Turkey
 ENV NODE_OPTIONS=--openssl-legacy-provider
 
@@ -8,7 +8,7 @@ ADD ./svelte.config.js /app/svelte.config.js
 ADD ./vite.config.js /app/vite.config.js
 ADD ./src /app/src
 ADD ./static /app/static
-ADD ./${ENV} /app/.env
+ADD ./${ENV}.env /app/.env
 
 WORKDIR /app
 
