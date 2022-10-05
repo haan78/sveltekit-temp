@@ -8,7 +8,7 @@
         <img slot="ready" let:src={base64data} src={base64data} alt="" />
     </ImageUpload>    
     <Auto bind:value={auto} name="auto" list={['Ali','Ali Veli','Deli','Barış','Barış Öztürk']}/>
-    <FormContainer validate={validate}>    
+    <FormContainer validate={validate} bind:form={form}>    
         <FormInput>
             <span slot="label" >Ad</span>
             <input name="ad" type="text" slot="input"/>
@@ -45,6 +45,9 @@
     <button type="button" class="btn good">Kaydet</button>
     </FormContainer>
     {group}
+    <InputFile name="dosya2" bind:this={infile} bind:src={src} />
+
+    <img src={src || "/siktir.jpg" } alt="Bulunamadi" on:click={ ()=>infile.open() } />
 </main>
 <script>
 // @ts-nocheck
@@ -56,17 +59,22 @@
     import CheckBox from '$lib/comp/CheckBox.svelte';
     import Radio from '$lib/comp/Radio.svelte';
     import ImageUpload from '$lib/comp/ImageUpload.svelte';
+    import InputFile from '$lib/comp/InputFile.svelte';
+    let form;
     let fi_soyad;
     let checkbox_val = true;
     let group = "A";
     let auto = "";
+    let src = "";
+    let infile;
     function validate() {
-        console.log("burda");
+        return true;
+        /*console.log("burda");
         fi_soyad.message("Beğenmedim",3000);
-        return false;
+        return false;*/
     }
     onMount(()=>{
-
+        
     });
 </script>
 <style>

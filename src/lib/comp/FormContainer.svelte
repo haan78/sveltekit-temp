@@ -2,6 +2,7 @@
     export let method = "POST";
     export let action = "";
     export let enctype = "multipart/form-data";
+    export let form:HTMLFormElement | null = null;
 
     export let validate:() => Promise<Boolean>;
 
@@ -14,4 +15,4 @@
     }
 </script>
 
-<form method={method} action={action} enctype={enctype} on:submit={submit}><slot></slot></form>
+<form method={method} action={action} enctype={enctype} on:submit={submit} bind:this={form} ><slot></slot></form>
