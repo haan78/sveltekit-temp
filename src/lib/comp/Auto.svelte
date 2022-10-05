@@ -25,7 +25,7 @@
     function blur() {
         setTimeout(()=>{
             opclass="";
-        },1000);
+        },550);
         
     }
 
@@ -72,12 +72,17 @@
         display: none;
         background-color: var(--cl-bg-default);
         width: inherit;
+        filter: drop-shadow(.5em .5em var(--br-rd-default) var(--cl-bg-shadow));
+        border: var(--br-default);
+        border-radius: .3em;
+        padding: .3em;
     }
 
     .Auto > .list > .option {
         border-bottom: var(--br-default);
         cursor: pointer;
         display: block;
+        color: var(--cl-tx-info);
         margin-bottom: var(--di-in-default);
     }
 

@@ -1,4 +1,12 @@
 <main>
+    <!-- svelte-ignore a11y-missing-attribute -->
+    <img src="/siktir.jpg" />
+    <ImageUpload>
+        <span slot="loading">Lütfen Bekleyin...</span>
+        <span slot="empty">Bir resim yükleyin</span> 
+        <span slot="error" let:message={message} >HATA: {message}</span>
+        <img slot="ready" let:src={base64data} src={base64data} alt="" />
+    </ImageUpload>    
     <Auto bind:value={auto} name="auto" list={['Ali','Ali Veli','Deli','Barış','Barış Öztürk']}/>
     <FormContainer validate={validate}>    
         <FormInput>
@@ -47,6 +55,7 @@
     import { ActivityIcon,SaveIcon,LogInIcon } from 'svelte-feather-icons'
     import CheckBox from '$lib/comp/CheckBox.svelte';
     import Radio from '$lib/comp/Radio.svelte';
+    import ImageUpload from '$lib/comp/ImageUpload.svelte';
     let fi_soyad;
     let checkbox_val = true;
     let group = "A";

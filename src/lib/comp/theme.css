@@ -22,6 +22,7 @@
     --cl-bg-good: darkgreen;
     --cl-bg-input:rgb(243, 247, 235);
     --cl-bg-default:white;
+    --cl-bg-shadow:rgb(66, 64, 64);
     
     --cl-tx-primary: #FFFAF0;
     --cl-tx-info:rgb(116, 111, 111);
@@ -37,6 +38,7 @@
     --di-br-default:.2em;
 
     --br-default:calc(var(--di-br-default)/2) var(--cl-br-default) solid;
+    --br-rd-default:.8em;
 }
 
 html {
