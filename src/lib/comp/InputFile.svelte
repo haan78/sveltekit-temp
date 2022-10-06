@@ -7,8 +7,17 @@
     export let src:string = "";
     export let size:number = 0;
     export let type:string = "";
+
     export function open():void {
         input.click();
+    }
+
+    export async function download(url:string) {
+        return new Promise<Blob>((resolve,reject)=>{
+            fetch(url).then(response=>{
+                response.blob().then(bdata=>resolve(bdata)).catch(err=>reject(err));
+            }).catch(err=>reject(err));
+        });
     }
 
     const onevt = createEventDispatcher();

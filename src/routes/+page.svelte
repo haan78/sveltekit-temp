@@ -1,14 +1,6 @@
 <main>
-    <!-- svelte-ignore a11y-missing-attribute -->
-    <img src="/siktir.jpg" />
-    <ImageUpload>
-        <span slot="loading">Lütfen Bekleyin...</span>
-        <span slot="empty">Bir resim yükleyin</span> 
-        <span slot="error" let:message={message} >HATA: {message}</span>
-        <img slot="ready" let:src={base64data} src={base64data} alt="" />
-    </ImageUpload>    
-    <Auto bind:value={auto} name="auto" list={['Ali','Ali Veli','Deli','Barış','Barış Öztürk']}/>
     <FormContainer validate={validate} bind:form={form}>    
+        <Auto bind:value={auto} name="auto" list={['Ali','Ali Veli','Deli','Barış','Barış Öztürk']}/>
         <FormInput>
             <span slot="label" >Ad</span>
             <input name="ad" type="text" slot="input"/>
@@ -35,19 +27,24 @@
         <CheckBox bind:checked={checkbox_val} position="left" name="cb1">{(checkbox_val ? "EVET" : "HAYIR")}</CheckBox>
 
         <br/>
-        <Radio bind:group={group} name="raido" value="A">Raido1</Radio><br/>
-        <Radio bind:group={group} name="raido" value="B">Raido2</Radio><br/>
-        <Radio bind:group={group} name="raido" value="C">Raido3</Radio><br/>
+        <div>
+            <img style={`object-fit:${group}`} class="img1" src={src || "/siktir.jpg" } alt="Bulunamadi" on:click={ ()=>infile.open() }  /><br/>
+            <Radio bind:group={group} name="raido" value="none">None</Radio>
+        <Radio bind:group={group} name="raido" value="scale-down">scale-down</Radio>
+        <Radio bind:group={group} name="raido" value="cover">cover</Radio>
+        <Radio bind:group={group} name="raido" value="contain">contain</Radio>
+        <Radio bind:group={group} name="raido" value="fill">fill</Radio>
+        </div>
+        
     <button type="submit" class="btn prm"><LogInIcon size="1x"></LogInIcon>Kaydet</button>
     <button type="button" class="btn bad"><ActivityIcon size="1x"></ActivityIcon>Kaydet</button>
     <button type="button" class="btn ugly"><SaveIcon size="1x"></SaveIcon> Kaydet</button>
     
     <button type="button" class="btn good">Kaydet</button>
     </FormContainer>
-    {group}
     <InputFile name="dosya2" bind:this={infile} bind:src={src} />
 
-    <img src={src || "/siktir.jpg" } alt="Bulunamadi" on:click={ ()=>infile.open() } />
+    
 </main>
 <script>
 // @ts-nocheck
@@ -58,7 +55,6 @@
     import { ActivityIcon,SaveIcon,LogInIcon } from 'svelte-feather-icons'
     import CheckBox from '$lib/comp/CheckBox.svelte';
     import Radio from '$lib/comp/Radio.svelte';
-    import ImageUpload from '$lib/comp/ImageUpload.svelte';
     import InputFile from '$lib/comp/InputFile.svelte';
     let form;
     let fi_soyad;
@@ -80,4 +76,15 @@
 <style>
     @import "$lib/comp/theme.css";
     @import "$lib/comp/Button.css";
+
+    .img1 {
+        width: 200px;
+        height: 200px;
+        border-radius: .8em;
+        filter: drop-shadow(1em 1em .8em black);
+        cursor: pointer;
+        border: .2em silver solid;
+    }
+
+
 </style>
