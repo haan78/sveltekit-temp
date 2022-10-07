@@ -28,7 +28,8 @@
 		"dotenv": "^16.0.2",
 		"feather-icons": "^4.29.0",
 		"jsonwebtoken": "^8.5.1",
-		"mongodb": "4.9"
+		"mongodb": "4.9",
+		"react": "18.2.0"
 	},
 	"type": "module"
 }

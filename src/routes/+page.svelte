@@ -28,7 +28,9 @@
 
         <br/>
         <div>
-            <img style={`object-fit:${group}`} class="img1" src={src || "/siktir.jpg" } alt="Bulunamadi" on:click={ ()=>infile.open() }  /><br/>
+            <img bind:this={img} style={`object-fit:${group}`} class="img1" src={src || "/siktir.jpg" } bin alt="Bulunamadi" on:click={ ()=>infile.open() }  /><br/>
+            <InputFile name="dosya2" bind:this={infile} bind:src={src} on:change={imgchange} />
+            <span>{wh}</span>
             <Radio bind:group={group} name="raido" value="none">None</Radio>
         <Radio bind:group={group} name="raido" value="scale-down">scale-down</Radio>
         <Radio bind:group={group} name="raido" value="cover">cover</Radio>
@@ -42,7 +44,7 @@
     
     <button type="button" class="btn good">Kaydet</button>
     </FormContainer>
-    <InputFile name="dosya2" bind:this={infile} bind:src={src} />
+    
 
     
 </main>
@@ -59,18 +61,26 @@
     let form;
     let fi_soyad;
     let checkbox_val = true;
-    let group = "A";
+    let group = "none";
     let auto = "";
     let src = "";
     let infile;
+    let img;
+    let wh  = "XXX";
+    
     function validate() {
         return true;
         /*console.log("burda");
         fi_soyad.message("Beğenmedim",3000);
         return false;*/
     }
+
+    function imgchange() {
+        wh = img.naturalWidth + " X " + img.naturalHeight;
+    }
+
     onMount(()=>{
-        
+        wh = img.naturalWidth + " X " + img.naturalHeight;
     });
 </script>
 <style>
