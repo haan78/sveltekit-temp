@@ -52,30 +52,33 @@ export async function insertOrUpdate(conn:Connection,table:string,params:Record<
 
 export class MysqlCall  {
     private params:Array<Param> = [];
-    private conInfo={
-        host:"",
-        user:"",
-        password:"",
-        database:"",
-        port:0,
-        multipleStatements:true
-    }
-    constructor (settings:Settings|string) {
+    private connection:Connection;
+    constructor (connection:Connection|string) {
         this.params = [];
-        if (typeof settings == "string") {
-            settings.split("|").forEach((elm, i) => {
-                if (i == 0) this.conInfo.host = elm.trim();
-                else if (i == 1) this.conInfo.user = elm.trim();
-                else if (i == 2) this.conInfo.password = elm.trim();
-                else if (i == 3) this.conInfo.database = elm.trim();
-                else if (i == 4) this.conInfo.port = parseInt(elm.trim());
+        if ( typeof connection === "string" ) {
+            const conn =  createConnection(connection);
+            this.connection = createConnection({ 
+                multipleStatements:true,
+                host:conn.config.host, 
+                user:conn.config.user,
+                password:conn.config.password,
+                port:conn.config.port,
+                database:conn.config.database,
+                ssl:conn.config.ssl,
+                flags:conn.config.flags,
+                connectTimeout:conn.config.connectTimeout,
+                timezone:conn.config.timezone
             });
+            conn.end();
+            conn.destroy();
+            this.connection.config.multipleStatements = true;
         } else {
-            this.conInfo.host = settings.host;
-            this.conInfo.user = settings.user;
-            this.conInfo.password = settings.password;            
-            this.conInfo.database = settings.database || "";
-            this.conInfo.port = settings.port || 3306;
+            if (connection.config.multipleStatements) {
+                this.connection = connection;       
+            } else {
+                throw new Error("multipleStatements must be enabled");
+            }
+            
         }        
     }
 
@@ -117,11 +120,10 @@ export class MysqlCall  {
         }
     }
 
-    public call(name:string):Promise<Result> {
+    public async call(name:string):Promise<Result> {
         let self = this;
-        return new Promise<Result>((resolve,reject)=>{
-            const conn : Connection = createConnection(this.conInfo);
-            conn.connect(function(err){
+        return new Promise<Result>((resolve,reject)=>{           
+            self.connection.connect(function(err){
                 if (!err) {
                     let sets = "";
                     let gets = "";                    
@@ -147,26 +149,30 @@ export class MysqlCall  {
                         sql = `CALL ${name}(${puts});`;
                     }
                     //console.log(sql);
-                    conn.query(sql,function(err,result){
+                    self.connection.query(sql,function(err,result){
+                        self.connection.end();
                         if (!err) {
                             let outs:Record<string,unknown> = {};
                             let results:Array<Array<Record<string,unknown>>> = [];
                             if (Array.isArray(result)) {
                                 result.forEach((r,i) => {
                                     if (i == result.length-1 && sets.length > 0) {
-                                        outs = <Record<string,unknown>>r;
+                                        if ( r.length > 0 ) {
+                                            for (let k in r[0]) {
+                                                outs[k.substring(1)] = r[0][k];
+                                            }                                            
+                                        }                                        
                                     } else if ( Array.isArray(r) ) {
                                         results.push(<Array<Record<string,unknown>>>r);
                                     }
                                 });
-                            }                            
-                            conn.end();
-                            resolve({
+                            }             
+                            const res:Result = {
                                 outs:outs,
                                 results:results
-                            });
+                            };
+                            resolve(res);
                         } else {
-                            conn.end();
                             reject(err);
                         }
                     });

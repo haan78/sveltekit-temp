@@ -4,10 +4,17 @@
     export let enctype = "multipart/form-data";
     export let form:HTMLFormElement | null = null;
 
-    export let validate:() => Promise<Boolean>;
+    type ValidateFnc = () => Promise<Boolean>;
+    export let validate: ValidateFnc | null = null;
 
-    async function submit(evt: Event) {
-        if ( !await validate() ) {
+    export function submit() {
+        if (form) {
+            form.submit();
+        }        
+    }
+
+    async function submitcontrol(evt: Event) {        
+        if ( validate && !await validate() ) {
             evt.preventDefault();
             return false;
         }
@@ -15,4 +22,4 @@
     }
 </script>
 
-<form method={method} action={action} enctype={enctype} on:submit={submit} bind:this={form} ><slot></slot></form>
+<form method={method} action={action} enctype={enctype} on:submit={submitcontrol} bind:this={form} ><slot></slot></form>

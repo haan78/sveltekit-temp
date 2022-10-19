@@ -6,9 +6,6 @@
     const dispatch = createEventDispatcher();
 
     export let visible = false;
-    $:{
-        console.log(["Prop Visibel",visible]);
-    }
     
     function show() {
         dispatch('show',null);

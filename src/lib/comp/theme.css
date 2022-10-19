@@ -39,6 +39,10 @@
 
     --br-default:calc(var(--di-br-default)/2) var(--cl-br-default) solid;
     --br-rd-default:.8em;
+    --default-z-index-1: 1001;
+    --default-z-index-2: 1002;
+    --default-z-index-3: 1003;
+
 }
 
 html {
@@ -53,7 +57,7 @@ body {
     background-color: var(--cl-bg-default);
 }
 
-input[type=text],textarea,input[type=date],input[type=datetime-local],select {
+input[type=text],textarea,input[type=date],input[type=datetime-local],select,input[type=email],input[type=password] {
     box-sizing: border-box;
     /*background-color: --cl-bg-input;*/
     background-color: var(--cl-bg-input);
@@ -65,13 +69,14 @@ input[type=text],textarea,input[type=date],input[type=datetime-local],select {
     border: var(--br-default);
     font-style: italic;
     color: var(--cl-tx-info);
+    width: 100%;
 }
 
-:is(input[type=text],textarea,input[type=date],input[type=datetime-local],select):focus {    
+:is(input[type=text],textarea,input[type=date],input[type=datetime-local],select,input[type=email],input[type=password]):focus {    
     outline: var(--di-br-default) var(--cl-br-active) solid;
 }
 
-:is(input[type=text],textarea,input[type=date],input[type=datetime-local],select):hover {
+:is(input[type=text],textarea,input[type=date],input[type=datetime-local],select,input[type=email],input[type=password]):hover {
     outline: var(--di-br-default) var(--cl-br-hover) solid;
 }
 

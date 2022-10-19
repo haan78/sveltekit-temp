@@ -27,12 +27,20 @@
         <slot name="label" />
     </span>
     <span class="inp">
-        <slot name="input" /> <br />
-        {#if !_message}
-            <i class="subline info"><slot name="info" /></i>
-        {:else}
-            <i class="subline alert">{_message}</i>
-        {/if}
+        <div class="inpline">            
+            <div class="input"><slot name="input" /></div>
+            {#if $$slots.icon  }
+            <div class="icon"><slot name="icon"/></div>
+            {/if}
+            
+        </div>        
+        <div class="subline">
+            {#if !_message}
+                <i class="info"><slot name="info" /></i>
+            {:else}
+                <i class="alert">{_message}</i>
+            {/if}
+        </div>
     </span>
 </label>
 
@@ -44,7 +52,6 @@
         flex-direction: column;
         vertical-align: middle;
         align-items: flex-start;
-        width: 100%;
         padding: var(--di-in-default);
     }
 
@@ -65,19 +72,39 @@
     }
 
     .FormInput > span.inp {
-        height: 1.5em;
+        width: 100%;
     }
 
     .FormInput > span.inp > .subline {
         font-size: smaller;
     }
 
-    .FormInput > span.inp > .subline.info {
+    .FormInput > span.inp > .subline > .info {
         color: var(--cl-tx-info);
     }
 
-    .FormInput > span.inp > .subline.alert {
+    .FormInput > span.inp > .subline > .alert {
         color: var(--cl-tx-bad);
         font-weight: bold;
+    }
+    .FormInput > span.inp > .inpline {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+    }
+    .FormInput > span.inp > .inpline > div {
+        position: relative;
+    }
+    .FormInput > span.inp > .inpline > div.icon {
+        flex: 0;
+        display: flex;
+        align-items: center;
+        padding-left: .2em;
+        color: var(--cl-tx-info);
+        font-size: large;
+    }
+    .FormInput > span.inp > .inpline > div.input {
+        flex: 1;
+        width: 100%;
     }
 </style>

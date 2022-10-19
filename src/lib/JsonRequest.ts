@@ -7,7 +7,7 @@ export interface RequestJWT {
     time:number
 }
 
-export class Request {
+export class JsonRequest {
     public static encoding = 'UTF-8';    
     private _auth:string;
 
@@ -15,12 +15,12 @@ export class Request {
         this._auth = "";
     }
 
-    public bearer(token: string):Request {
+    public bearer(token: string):JsonRequest {
         this._auth = `Bearer ${token}`;
         return this;
     }
 
-    public basic(user:string,password:string):Request {        
+    public basic(user:string,password:string):JsonRequest {        
         //this._auth = "Basic "+Buffer.from(user+":"+password, "binary").toString("base64");
         this._auth = "Basic "+btoa(user+":"+password);
         return this;
@@ -29,7 +29,7 @@ export class Request {
     public json(url: string, data: unknown = null): Promise<unknown> {
 
         const headers:Header = {
-            "Content-Type":`application/json; charset=${Request.encoding}`
+            "Content-Type":`application/json; charset=${JsonRequest.encoding}`
         }
 
         if (this._auth!=="") {            

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import "./Confirm.css";
 export default (container) => {
     return {
