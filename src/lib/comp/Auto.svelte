@@ -6,17 +6,14 @@
     export let value:string;
     export let name:string;
     export let list:Array<string> = [];
+    export let minLength=3;
+    export let maxListCount=10;
 
     const onevt = createEventDispatcher();
 
-    $:options = list.filter(option=>{        
-        if (option) {
-            return option.trim().toLocaleLowerCase().startsWith(value.trim().toLocaleLowerCase());
-        } {
-            return true;
-        }
-        
-    });
+    $: options = list.filter(option=>{                    
+            return value.length >= minLength && option.trim().toLocaleLowerCase().startsWith(value.trim().toLocaleLowerCase());
+        }).sort().slice(0,maxListCount);
 
     function focus() {
         opclass="show";
